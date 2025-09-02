@@ -1,3 +1,45 @@
+from gtts import gTTS
+from moviepy.editor import *
+import os
+
+# የሴት ድምፅ ስክሪፕት
+text = """
+ጤና ይስጥልኝ… 
+በአጭር ጊዜ ህይወታችሁን ለመቀየር… 
+እኛን ያማክሩን ፕሮፋይል ላይ ባለው ስልክ ይደውሉልን!
+"""
+
+# ድምፅ ፋይል መፍጠር
+tts = gTTS(text=text, lang="am")
+tts.save("video_voice.mp3")
+
+# የድምፁን ርዝመት ማወቅ
+audio = AudioFileClip("video_voice.mp3")
+duration = audio.duration  # የቪዲዮ ርዝመት
+
+# ቀለም ያለው ቢጫ background ቪዲዮ
+clip = ColorClip(size=(720, 1280), color=(255, 255, 255), duration=duration)
+
+# የታይሰር ጽሑፎች
+txt_clip1 = TextClip("ጤና ይስጥልኝ", fontsize=70, color='black', font="Noto-Sans-Ethiopic-Bold")\
+    .set_position("center").set_duration(3)
+
+txt_clip2 = TextClip("በአጭር ጊዜ ህይወታችሁን ለመቀየር", fontsize=60, color='red', font="Noto-Sans-Ethiopic-Bold")\
+    .set_position("center").set_start(3).set_duration(5)
+
+txt_clip3 = TextClip("ፕሮፋይል ላይ ባለው ስልክ ይደውሉልን!", fontsize=65, color='blue', font="Noto-Sans-Ethiopic-Bold")\
+    .set_position("center").set_start(8).set_duration(duration-8)
+
+# በአንድ ላይ ማዋሃድ
+final = CompositeVideoClip([clip, txt_clip1, txt_clip2, txt_clip3])
+
+# ድምፅ ማክረብ
+final = final.set_audio(audio)
+
+# ቪዲዮ መቀመጥ
+final.write_videofile("final_video.mp4", fps=24)
+
+print("✅ ቪዲዮው ተጠናቀቀ። 'final_video.mp4' እንደተቀመጠ ይመለከቱ።")
 .. _install:
 
 Installation
